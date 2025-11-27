@@ -4,11 +4,8 @@ import org.example.blog.entity.Post;
 import org.example.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import java.time.Instant;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @RestController
 public class PostController {
@@ -17,7 +14,7 @@ public class PostController {
     PostService postService;
 
     @GetMapping("/")
-    public List<Post> getPosts() {
+    public Iterable<Post> getPosts() {
         return postService.getPosts();
     }
 
@@ -28,6 +25,7 @@ public class PostController {
 
     @PostMapping("/")
     public Post addPost(@RequestBody Post post) {
+        post.setCreatedAt(Instant.now().getEpochSecond());
        return postService.addPost(post);
     }
 
