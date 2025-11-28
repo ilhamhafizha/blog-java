@@ -43,7 +43,7 @@ public class PostService {
         }
         post.setDeleted(true);
         postRepository.save(post);
-        return  true;
+        return true;
     }
 
     public Post publishPost(Integer id) {

@@ -8,6 +8,7 @@ import java.time.Instant;
 
 
 @RestController
+@RequestMapping("/api/posts")
 public class PostController {
 
     @Autowired
