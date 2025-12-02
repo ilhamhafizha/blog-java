@@ -5,6 +5,8 @@ import org.example.blog.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+
 
 @RestController
 @RequestMapping("/api/comments")
@@ -27,6 +29,7 @@ public class CommentController {
 
     @PostMapping
     public Comment createComments(@RequestBody Comment comment) {
+        comment.setCreatedAt(Instant.now().getEpochSecond());
         return commentService.createComments(comment);
     }
 }
