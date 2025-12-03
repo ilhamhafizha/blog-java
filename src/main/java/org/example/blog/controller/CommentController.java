@@ -29,7 +29,7 @@ public class CommentController {
 
     @PostMapping
     public Comment createComments(@RequestBody Comment comment) {
-        comment.setCreatedAt(Instant.now().getEpochSecond());
+      //  comment.setCreatedAt(Instant.now().getEpochSecond());
         return commentService.createComments(comment);
     }
 }

@@ -1,5 +1,6 @@
 package org.example.blog.services;
 
+import jakarta.transaction.Transactional;
 import org.example.blog.entity.Comment;
 import org.example.blog.entity.Post;
 import org.example.blog.repository.CommentRepository;
@@ -32,9 +33,22 @@ public class CommentService {
         return commentRepository.findById(id).orElse(null);
     }
 
+
+    @Transactional
     public Comment createComments( Comment comment) {
+        Post post = postRepository.findFirstBySlugAndIsDeleted(comment.getPost().getSlug(), false).orElse(null);
+        if (post == null) {
+            return null;
+        }
+
         comment.setCreatedAt(Instant.now().getEpochSecond());
-        return commentRepository.save(comment);
+        comment.getPost().setId(post.getId());
+        comment = commentRepository.save(comment);
+
+        post.setCommentCount(post.getCommentCount() + 1);
+        postRepository.save(post);
+
+        return comment;
     }
 }
 
