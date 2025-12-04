@@ -15,7 +15,7 @@ public class CreatePostResponse {
 
     private String body;
 
-    private String slug;
+    private String path;
 
     private Long publishedAt;
 

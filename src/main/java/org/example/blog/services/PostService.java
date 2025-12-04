@@ -3,6 +3,7 @@ package org.example.blog.services;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.example.blog.entity.Post;
+import org.example.blog.mapper.PostMapper;
 import org.example.blog.repository.PostRepository;
 import org.example.blog.request.CreatePostRequest;
 import org.example.blog.response.CreatePostResponse;
@@ -25,20 +26,11 @@ public class PostService {
     }
 
     public CreatePostResponse addPost(CreatePostRequest request) {
-        Post post = new Post();
-        post.setBody(request.getBody());
-        post.setTitle(request.getTitle());
-        post.setSlug(request.getSlug());
+        Post post = PostMapper.INSTANCE.map(request);
         post.setCommentCount(0L);
         post.setCreatedAt(Instant.now().getEpochSecond());
-
         post = postRepository.save(post);
-        return CreatePostResponse.builder()
-                .slug(post.getSlug())
-                .title(post.getTitle())
-                .body(post.getBody())
-                .commentCount(post.getCommentCount())
-                .build();
+        return PostMapper.INSTANCE.map(post);
     }
 
     public Post updatePost(String slug,Post sendPostByUser) {
