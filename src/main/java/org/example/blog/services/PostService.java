@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.example.blog.entity.Post;
 import org.example.blog.repository.PostRepository;
+import org.example.blog.request.CreatePostRequest;
+import org.example.blog.response.CreatePostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,17 +24,28 @@ public class PostService {
         return postRepository.findFirstBySlugAndIsDeleted(slug,false).orElse(null);
     }
 
-    public Post addPost(Post post) {
+    public CreatePostResponse addPost(CreatePostRequest request) {
+        Post post = new Post();
+        post.setBody(request.getBody());
+        post.setTitle(request.getTitle());
+        post.setSlug(request.getSlug());
+        post.setCommentCount(0L);
         post.setCreatedAt(Instant.now().getEpochSecond());
-        return postRepository.save(post);
+
+        post = postRepository.save(post);
+        return CreatePostResponse.builder()
+                .slug(post.getSlug())
+                .title(post.getTitle())
+                .body(post.getBody())
+                .commentCount(post.getCommentCount())
+                .build();
     }
 
     public Post updatePost(String slug,Post sendPostByUser) {
         Post savePost = postRepository.findFirstBySlugAndIsDeleted(slug,false).orElse(null);
         if (savePost == null){
             return  null;
-        }
-        sendPostByUser.setId(savePost.getId());
+        }sendPostByUser.setId(savePost.getId());
         return postRepository.save(sendPostByUser);
     }
 

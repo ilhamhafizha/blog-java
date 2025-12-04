@@ -1,6 +1,9 @@
 package org.example.blog.controller;
 
+import jakarta.validation.Valid;
 import org.example.blog.entity.Post;
+import org.example.blog.request.CreatePostRequest;
+import org.example.blog.response.CreatePostResponse;
 import org.example.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +27,9 @@ public class PostController {
         return postService.getPostBySlug(slug);
     }
 
-    @PostMapping("/")
-    public Post addPost(@RequestBody Post post) {
-        post.setCreatedAt(Instant.now().getEpochSecond());
-       return postService.addPost(post);
+    @PostMapping
+    public CreatePostResponse addPost(@Valid @RequestBody CreatePostRequest createPostRequest) {
+       return postService.addPost(createPostRequest);
     }
 
     @PutMapping("/{slug}")
