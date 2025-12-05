@@ -8,17 +8,32 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Valid
 public class CreatePostRequest {
-    @Size(min = 2, message = "minimal 2")
+
+    @Size(min=2, message = "minimal 2 characters")
     @NotNull
     private String title;
-    @Size(min = 2, message = "minimal 2")
+    @Size(min=10, message = "minimal 10 characters")
+    @NotNull
     private String body;
-    @Size(min = 2, message = "minimal 2")
+    @Size(min=2, message = "minimal 2 characters")
+    @NotNull
     private String slug;
+
+    @NotNull
+    private Category category;
+
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Category {
+        @NotNull
+        private Integer id;
+    }
 }

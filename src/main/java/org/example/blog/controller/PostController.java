@@ -3,7 +3,9 @@ package org.example.blog.controller;
 import jakarta.validation.Valid;
 import org.example.blog.entity.Post;
 import org.example.blog.request.CreatePostRequest;
+import org.example.blog.request.GetPostBySlugRequest;
 import org.example.blog.response.CreatePostResponse;
+import org.example.blog.response.GetPostResponse;
 import org.example.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +25,13 @@ public class PostController {
     }
 
     @GetMapping("/{slug}")
-    public Post getPostBySlug(@PathVariable String slug) {
-        return postService.getPostBySlug(slug);
+    public GetPostResponse getPostBySlug(@PathVariable String slug) {
+
+        GetPostBySlugRequest request = GetPostBySlugRequest.builder()
+                .slug(slug)
+                .build();
+
+        return postService.getPostBySlug(request);
     }
 
     @PostMapping
