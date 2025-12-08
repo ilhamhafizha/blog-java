@@ -1,6 +1,9 @@
 package org.example.blog.controller;
 
+import jakarta.validation.Valid;
 import org.example.blog.entity.Comment;
+import org.example.blog.request.CreateCommentRequest;
+import org.example.blog.response.CreateCommentResponse;
 import org.example.blog.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +28,8 @@ public class CommentController {
     }
 
     @PostMapping
-    public Comment createComments(@RequestBody Comment comment) {
+    public CreateCommentResponse createComment(@Valid @RequestBody CreateCommentRequest comment) {
       //  comment.setCreatedAt(Instant.now().getEpochSecond());
-        return commentService.createComments(comment);
+        return commentService.createComment(comment);
     }
 }

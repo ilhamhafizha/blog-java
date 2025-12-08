@@ -3,8 +3,11 @@ package org.example.blog.services;
 import jakarta.transaction.Transactional;
 import org.example.blog.entity.Comment;
 import org.example.blog.entity.Post;
+import org.example.blog.mapper.CommentMapper;
 import org.example.blog.repository.CommentRepository;
 import org.example.blog.repository.PostRepository;
+import org.example.blog.request.CreateCommentRequest;
+import org.example.blog.response.CreateCommentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -35,20 +38,22 @@ public class CommentService {
 
 
     @Transactional
-    public Comment createComments( Comment comment) {
-        Post post = postRepository.findFirstBySlugAndIsDeleted(comment.getPost().getSlug(), false).orElse(null);
+    public CreateCommentResponse createComment(CreateCommentRequest request) {
+        Post post = postRepository.findFirstBySlugAndIsDeleted(request.getPost().getSlug(), false).orElse(null);
         if (post == null) {
             return null;
         }
 
+        Comment comment = CommentMapper.INSTANCE.mapToCreateCommentResponse(request);
+
         comment.setCreatedAt(Instant.now().getEpochSecond());
         comment.getPost().setId(post.getId());
-        comment = commentRepository.save(comment);
+        commentRepository.save(comment);
 
         post.setCommentCount(post.getCommentCount() + 1);
         postRepository.save(post);
 
-        return comment;
+        return CommentMapper.INSTANCE.mapToCreateCommentResponse(comment);
     }
 }
 

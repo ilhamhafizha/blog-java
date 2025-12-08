@@ -1,6 +1,8 @@
 package org.example.blog.exeption;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.method.MethodValidationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -16,5 +18,12 @@ public class ApiExceptionHandler {
         List<String> errorMessages = new ArrayList<>(Collections.singletonList(exception.getMessage()));
         ApiExceptionResponse response = ApiExceptionResponse.builder().ErrorMessages(errorMessages).build();
         return ResponseEntity.status(exception.getHttpStatus()).body(response);
+    }
+
+    @ExceptionHandler(MethodValidationException.class)
+    public ResponseEntity<ApiExceptionResponse> handler(MethodValidationException exception) {
+        List<String> errorMessages = new ArrayList<>(Collections.singletonList(exception.getMessage()));
+        ApiExceptionResponse response = ApiExceptionResponse.builder().ErrorMessages(errorMessages).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }
