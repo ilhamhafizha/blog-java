@@ -1,4 +1,4 @@
-package org.example.blog.request;
+package org.example.blog.request.comment;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;

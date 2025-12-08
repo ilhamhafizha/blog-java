@@ -1,4 +1,4 @@
-package org.example.blog.request;
+package org.example.blog.request.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

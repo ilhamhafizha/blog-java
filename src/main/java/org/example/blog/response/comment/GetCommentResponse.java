@@ -1,4 +1,4 @@
-package org.example.blog.response;
+package org.example.blog.response.comment;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateCommentResponse {
-
+public class GetCommentResponse {
+    private Integer id;
     private String name;
-    private String email;
     private Post post;
     private String body;
     private Long createdAt;

@@ -6,10 +6,12 @@ import org.example.blog.entity.Post;
 import org.example.blog.exeption.ApiException;
 import org.example.blog.mapper.PostMapper;
 import org.example.blog.repository.PostRepository;
-import org.example.blog.request.CreatePostRequest;
-import org.example.blog.request.GetPostBySlugRequest;
-import org.example.blog.response.CreatePostResponse;
-import org.example.blog.response.GetPostResponse;
+import org.example.blog.request.post.CreatePostRequest;
+import org.example.blog.request.post.GetPostBySlugRequest;
+import org.example.blog.response.post.CreatePostResponse;
+import org.example.blog.response.post.DeletePostByIdResponse;
+import org.example.blog.response.post.GetPostResponse;
+import org.example.blog.response.post.PublishPostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -49,24 +51,21 @@ public class PostService {
         return postRepository.save(sendPostByUser);
     }
 
-    public Boolean deletePost(Integer id) {
-        Post post = postRepository.findById(id).orElse(null);
-        if (post == null){
-            return  false;
-        }
+    public DeletePostByIdResponse deletePostById(Integer id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new ApiException("post not found", HttpStatus.NOT_FOUND));
         post.setDeleted(true);
         postRepository.save(post);
-        return true;
+        return DeletePostByIdResponse.builder().id(id).build();
     }
 
-    public Post publishPost(Integer id) {
-        Post post = postRepository.findById(id).orElse(null);
-        if (post == null){
-            return  null;
-        }
+    public PublishPostResponse publishPost(Integer id) {
+        Post post = postRepository.findByIdAndIsDeleted(id, false).orElseThrow(
+                () -> new ApiException("post not found", HttpStatus.NOT_FOUND));
         post.setPublished(true);
         post.setPublishedAt(Instant.now().getEpochSecond());
-        return postRepository.save(post);
+        postRepository.save(post);
+        return PublishPostResponse.builder().publishedAt(post.getPublishedAt()).build();
     }
 
     public Iterable<Post> getPosts() {

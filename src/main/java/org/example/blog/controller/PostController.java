@@ -2,14 +2,15 @@ package org.example.blog.controller;
 
 import jakarta.validation.Valid;
 import org.example.blog.entity.Post;
-import org.example.blog.request.CreatePostRequest;
-import org.example.blog.request.GetPostBySlugRequest;
-import org.example.blog.response.CreatePostResponse;
-import org.example.blog.response.GetPostResponse;
+import org.example.blog.request.post.CreatePostRequest;
+import org.example.blog.request.post.GetPostBySlugRequest;
+import org.example.blog.response.post.CreatePostResponse;
+import org.example.blog.response.post.DeletePostByIdResponse;
+import org.example.blog.response.post.GetPostResponse;
+import org.example.blog.response.post.PublishPostResponse;
 import org.example.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.time.Instant;
 
 
 @RestController
@@ -45,12 +46,12 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public Boolean deletePost(@PathVariable Integer id) {
-        return postService.deletePost(id);
+    public DeletePostByIdResponse deletePost(@PathVariable Integer id) {
+        return postService.deletePostById(id);
     }
 
     @PostMapping("/{id}/publish")
-    public Post publishPost(@PathVariable Integer id) {
+    public PublishPostResponse publishPost(@PathVariable Integer id) {
         return postService.publishPost(id);
     }
 }
