@@ -25,7 +25,7 @@ public class CreatePostRequest {
     @NotNull
     private String slug;
 
-    @NotNull
+
     private Category category;
 
     @Data
