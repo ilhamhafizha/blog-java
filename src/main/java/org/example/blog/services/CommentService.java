@@ -42,18 +42,16 @@ public class CommentService {
 
     public GetCommentResponse getComment(GetCommentByIdRequest request) {
         Comment comment = commentRepository.findById(request.getId())
-                .orElseThrow(()-> new ApiException("comment not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ApiException("comment not found", HttpStatus.NOT_FOUND));
         return CommentMapper.INSTANCE.mapToGetCommentResponse(comment);
     }
-
-
 
 
     @Transactional
     public CreateCommentResponse createComment(CreateCommentRequest request) {
         Post post = postRepository.findFirstBySlugAndIsDeleted(request.getPost().getSlug(), false).
                 orElseThrow(()
-                -> new ApiException("post not found", HttpStatus.NOT_FOUND));
+                        -> new ApiException("post not found", HttpStatus.NOT_FOUND));
 
         Comment comment = CommentMapper.INSTANCE.mapToCreateCommentResponse(request);
 
